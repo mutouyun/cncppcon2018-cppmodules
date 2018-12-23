@@ -35,7 +35,7 @@ description: 资料整理
 [http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2018/p1303r0.html](http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2018/p1303r0.html)  
 [http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2018/p1302r0.html](http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2018/p1302r0.html)  
 [http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2018/p1203r0.html](http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2018/p1203r0.html)  
-[http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2012/n3347.pdf](http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2012/n3347.pdf)
+[http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2012/n3347.pdf](http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2012/n3347.pdf)  
  Related Proposals
 
 [https://www.reddit.com/r/cpp/comments/7b2och/c\_modules/](https://www.reddit.com/r/cpp/comments/7b2och/c_modules/)  
@@ -64,7 +64,7 @@ description: 资料整理
  Compilers & Tools
 
 [http://files.cnblogs.com/files/qicosmos/Cplus17新特性带来的改善和音响.pdf](http://files.cnblogs.com/files/qicosmos/Cplus17新特性带来的改善和音响.pdf)   
-[http://llvm.org/devmtg/2012-11/Gregor-Modules.pdf](http://llvm.org/devmtg/2012-11/Gregor-Modules.pdf) Modules, Doug Gregor, Apple, 2012
+[http://llvm.org/devmtg/2012-11/Gregor-Modules.pdf](http://llvm.org/devmtg/2012-11/Gregor-Modules.pdf) Modules, Doug Gregor, Apple, 2012  
 [https://www.youtube.com/watch?v=5CadIjPRZpM](https://www.youtube.com/watch?v=5CadIjPRZpM) Progress With C++ Modules - GNU Tools Cauldron 2018  
 [https://www.youtube.com/watch?v=xi2lTaC5p0I](https://www.youtube.com/watch?v=xi2lTaC5p0I) CppCon 2018: Nathan Sidwell “C++ Modules”  
 [https://www.youtube.com/watch?v=5EI3XBde\_w4](https://www.youtube.com/watch?v=5EI3XBde_w4) CppCon 2017: Nathan Sidwell “Adding C++ modules-ts to the GNU Compiler”  
