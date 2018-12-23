@@ -4,6 +4,16 @@ description: 资料整理
 
 # C++ Modules
 
+[http://files.cnblogs.com/files/qicosmos/Cplus17新特性带来的改善和音响.pdf](http://files.cnblogs.com/files/qicosmos/Cplus17新特性带来的改善和音响.pdf)   
+[http://llvm.org/devmtg/2012-11/Gregor-Modules.pdf](http://llvm.org/devmtg/2012-11/Gregor-Modules.pdf) Modules, Doug Gregor, Apple, 2012  
+[https://www.youtube.com/watch?v=5CadIjPRZpM](https://www.youtube.com/watch?v=5CadIjPRZpM) Progress With C++ Modules - GNU Tools Cauldron 2018  
+[https://www.youtube.com/watch?v=xi2lTaC5p0I](https://www.youtube.com/watch?v=xi2lTaC5p0I) CppCon 2018: Nathan Sidwell “C++ Modules”  
+[https://www.youtube.com/watch?v=5EI3XBde\_w4](https://www.youtube.com/watch?v=5EI3XBde_w4) CppCon 2017: Nathan Sidwell “Adding C++ modules-ts to the GNU Compiler”  
+[https://www.youtube.com/watch?v=PxFrhYAYF3M](https://www.youtube.com/watch?v=PxFrhYAYF3M) CppCon 2017: Boris Kolpackov “C++ Modules and Packages: Making Dreams Come True” \(build2\)  
+[https://www.youtube.com/watch?v=E8EbDcLQAoc](https://www.youtube.com/watch?v=E8EbDcLQAoc) CppCon 2017: Boris Kolpackov “Building C++ Modules”  
+[https://www.youtube.com/watch?v=dHFNpBfemDI](https://www.youtube.com/watch?v=dHFNpBfemDI) CppCon 2016: Manuel Klimek “Deploying C++ modules to 100s of millions of lines of code"  
+[https://build2.org/doc/modules-cppcon2017.pdf](https://build2.org/doc/modules-cppcon2017.pdf)  
+
 [http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2016/p0142r0.pdf](http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2016/p0142r0.pdf)  
 [http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2016/p0143r2.pdf](http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2016/p0143r2.pdf)  
 [http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2017/n4689.pdf](http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2017/n4689.pdf)  
@@ -63,12 +73,3 @@ description: 资料整理
 [https://build2.org/build2/doc/build2-build-system-manual.xhtml\#module-cxx](https://build2.org/build2/doc/build2-build-system-manual.xhtml#module-cxx)  
  Compilers & Tools
 
-[http://files.cnblogs.com/files/qicosmos/Cplus17新特性带来的改善和音响.pdf](http://files.cnblogs.com/files/qicosmos/Cplus17新特性带来的改善和音响.pdf)   
-[http://llvm.org/devmtg/2012-11/Gregor-Modules.pdf](http://llvm.org/devmtg/2012-11/Gregor-Modules.pdf) Modules, Doug Gregor, Apple, 2012  
-[https://www.youtube.com/watch?v=5CadIjPRZpM](https://www.youtube.com/watch?v=5CadIjPRZpM) Progress With C++ Modules - GNU Tools Cauldron 2018  
-[https://www.youtube.com/watch?v=xi2lTaC5p0I](https://www.youtube.com/watch?v=xi2lTaC5p0I) CppCon 2018: Nathan Sidwell “C++ Modules”  
-[https://www.youtube.com/watch?v=5EI3XBde\_w4](https://www.youtube.com/watch?v=5EI3XBde_w4) CppCon 2017: Nathan Sidwell “Adding C++ modules-ts to the GNU Compiler”  
-[https://www.youtube.com/watch?v=PxFrhYAYF3M](https://www.youtube.com/watch?v=PxFrhYAYF3M) CppCon 2017: Boris Kolpackov “C++ Modules and Packages: Making Dreams Come True” \(build2\)  
-[https://www.youtube.com/watch?v=E8EbDcLQAoc](https://www.youtube.com/watch?v=E8EbDcLQAoc) CppCon 2017: Boris Kolpackov “Building C++ Modules”  
-[https://www.youtube.com/watch?v=dHFNpBfemDI](https://www.youtube.com/watch?v=dHFNpBfemDI) CppCon 2016: Manuel Klimek “Deploying C++ modules to 100s of millions of lines of code"  
-[https://build2.org/doc/modules-cppcon2017.pdf](https://build2.org/doc/modules-cppcon2017.pdf)  
