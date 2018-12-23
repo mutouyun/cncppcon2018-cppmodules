@@ -13,7 +13,8 @@ description: 资料整理
 [https://www.youtube.com/watch?v=E8EbDcLQAoc](https://www.youtube.com/watch?v=E8EbDcLQAoc) CppCon 2017: Boris Kolpackov “Building C++ Modules”  
 [https://www.youtube.com/watch?v=dHFNpBfemDI](https://www.youtube.com/watch?v=dHFNpBfemDI) CppCon 2016: Manuel Klimek “Deploying C++ modules to 100s of millions of lines of code"  
 [https://build2.org/doc/modules-cppcon2017.pdf](https://build2.org/doc/modules-cppcon2017.pdf)  
-
+ Speeches  
+  
 [http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2016/p0142r0.pdf](http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2016/p0142r0.pdf)  
 [http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2016/p0143r2.pdf](http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2016/p0143r2.pdf)  
 [http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2017/n4689.pdf](http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2017/n4689.pdf)  
@@ -27,7 +28,7 @@ description: 资料整理
 [http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2018/p1052r0.html](http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2018/p1052r0.html)  
 [http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2018/p1087r0.pdf](http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2018/p1087r0.pdf)  
  Modules and macros, Google's modules design  
-
+  
 [http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2018/n4729.pdf](http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2018/n4729.pdf)  
 [http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2018/p1103r0.pdf](http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2018/p1103r0.pdf)  
 [http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2018/p1103r1.pdf](http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2018/p1103r1.pdf)  
@@ -47,7 +48,7 @@ description: 资料整理
 [http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2018/p1203r0.html](http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2018/p1203r0.html)  
 [http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2012/n3347.pdf](http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2012/n3347.pdf)  
  Related Proposals
-
+  
 [https://www.reddit.com/r/cpp/comments/7b2och/c\_modules/](https://www.reddit.com/r/cpp/comments/7b2och/c_modules/)  
 [https://www.reddit.com/r/cpp/comments/9vwvbz/2018\_san\_diego\_iso\_c\_committee\_trip\_report\_ranges/](https://www.reddit.com/r/cpp/comments/9vwvbz/2018_san_diego_iso_c_committee_trip_report_ranges/)  
 [https://imtwice.cn/index.php/archives/24/](https://imtwice.cn/index.php/archives/24/)  
@@ -63,7 +64,7 @@ description: 资料整理
 [https://stackoverflow.com/questions/43882243/c-20-modules-no-exporting-of-privates](https://stackoverflow.com/questions/43882243/c-20-modules-no-exporting-of-privates)  
 [https://stackoverflow.com/questions/43167449/how-to-export-functions-and-classes-from-module-not-using-export-keyword](https://stackoverflow.com/questions/43167449/how-to-export-functions-and-classes-from-module-not-using-export-keyword)  
  Discussions
-
+  
 [https://blogs.msdn.microsoft.com/vcblog/2015/12/03/c-modules-in-vs-2015-update-1/](https://blogs.msdn.microsoft.com/vcblog/2015/12/03/c-modules-in-vs-2015-update-1/)  
 [https://blogs.msdn.microsoft.com/vcblog/2017/05/05/cpp-modules-in-visual-studio-2017/](https://blogs.msdn.microsoft.com/vcblog/2017/05/05/cpp-modules-in-visual-studio-2017/)  
 [https://blogs.msdn.microsoft.com/vcblog/2018/11/27/better-template-support-and-error-detection-in-c-modules-with-msvc-2017-version-15-9/](https://blogs.msdn.microsoft.com/vcblog/2018/11/27/better-template-support-and-error-detection-in-c-modules-with-msvc-2017-version-15-9/)  
@@ -72,4 +73,3 @@ description: 资料整理
 [https://gcc.gnu.org/wiki/cxx-modules?action=AttachFile&do=view&target=module-abi-2017-09-01.pdf](https://gcc.gnu.org/wiki/cxx-modules?action=AttachFile&do=view&target=module-abi-2017-09-01.pdf)  
 [https://build2.org/build2/doc/build2-build-system-manual.xhtml\#module-cxx](https://build2.org/build2/doc/build2-build-system-manual.xhtml#module-cxx)  
  Compilers & Tools
-
