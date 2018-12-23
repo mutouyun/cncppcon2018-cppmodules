@@ -1,6 +1,7 @@
 # C++ Modules
 
 * 资料整理：[References](References.md)
+* 演讲ppt：[C++ Modules.pptx](cpp-modules.pptx)
 * 以下是一部分翻译（不完整）
 
 ## C++ Standards Committee Papers
