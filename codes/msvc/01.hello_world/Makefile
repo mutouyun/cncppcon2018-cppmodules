@@ -1,21 +1,20 @@
-# Define exports
+# Define vars
 
-export CC ?= cl
-export CX ?= cl
-export LB ?= link
-
-export CFLAGS ?= /experimental:module /std:c++latest /EHsc /MD /c
+CC = cl
+CX = cl
+LB = link
+CFLAGS = /experimental:module /std:c++latest /EHsc /MD /c
 
 # Compile
 
-all: main.exe
+all: main
 
 main.obj: main.cpp
-	@echo Compiling $<...
-	@$(CX) $(CFLAGS) $<
+	@echo Compiling $**...
+	@$(CX) $(CFLAGS) $**
 
-main.exe: main.obj
-	@$(LB) $<
+main: main.obj
+	@$(LB) $**
 
 # Targets
 

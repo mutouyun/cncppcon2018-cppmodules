@@ -1,29 +1,28 @@
-# Define exports
+# Define vars
 
-export CC ?= cl
-export CX ?= cl
-export LB ?= link
-
-export CFLAGS ?= /experimental:module /std:c++latest /EHsc /MD /c
+CC = cl
+CX = cl
+LB = link
+CFLAGS = /experimental:module /std:c++latest /EHsc /MD /c
 
 # Compile
 
-all: main.exe
+all: main
 
 hello.ifc hello.obj: hello.ixx
-	@echo Compiling $<...
-	@$(CX) $(CFLAGS) $<
+	@echo Compiling $**...
+	@$(CX) $(CFLAGS) $**
 
 hello_impl.obj: hello.ifc hello_impl.cpp
-	@echo Compiling $^...
-	@$(CX) $(CFLAGS) /module:reference $^
+	@echo Compiling $**...
+	@$(CX) $(CFLAGS) /module:reference $**
 
 main.obj: hello.ifc main.cpp
-	@echo Compiling $^...
-	@$(CX) $(CFLAGS) /module:reference $^
+	@echo Compiling $**...
+	@$(CX) $(CFLAGS) /module:reference $**
 
-main.exe: main.obj hello.obj hello_impl.obj
-	@$(LB) $^
+main: main.obj hello.obj hello_impl.obj
+	@$(LB) $**
 
 # Targets
 
