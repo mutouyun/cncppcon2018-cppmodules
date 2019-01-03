@@ -1,5 +1,7 @@
 # C++ Modules
 
+[![](https://img.shields.io/badge/speech-bilibili-ff69b4.svg)](https://www.bilibili.com/video/av39793845/?p=5)
+
 * 资料整理：[References](References.md)
 * 演讲ppt：[C++ Modules.pptx](cpp-modules.pptx)
 * 以下是一部分翻译（不完整）
