@@ -15,3 +15,20 @@
  
 一个很经典的例子是`Windows.h`里的：  
 
+```c++
+#include <iostream>
+#include <limits>
+
+#include <Windows.h>
+
+int main() {
+    std::cout << std::numeric_limits<int>::max() << std::endl;
+    /*
+        warning C4003: not enough actual parameters for macro 'max'
+        error C2589: '(' : illegal token on right side of '::'
+        error C2143: syntax error : missing ')' before '::'
+        error C2059: syntax error : ')'
+    */
+    return 0;
+}
+```
