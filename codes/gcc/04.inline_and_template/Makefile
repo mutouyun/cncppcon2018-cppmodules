@@ -39,7 +39,7 @@ main: main.o hello.o say.o foo.o foo_impl.o
 
 clean:
 	@echo Cleaning directorys...
-	@rm *.out *.o *.nms
+	@rm *.out *.o *.nms *.gcm
 	@echo Clean complete.
 
 # PHONY
