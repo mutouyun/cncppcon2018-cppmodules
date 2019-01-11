@@ -32,6 +32,7 @@ description: 资料整理
 [http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2018/n4729.pdf](http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2018/n4729.pdf)  
 [http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2018/p1103r0.pdf](http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2018/p1103r0.pdf)  
 [http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2018/p1103r1.pdf](http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2018/p1103r1.pdf)  
+[http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2018/p1103r2.pdf](http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2018/p1103r2.pdf) Merging Modules R2  
 [http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2018/p1156r0.html](http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2018/p1156r0.html)  
 [http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2018/p1180r0.html](http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2018/p1180r0.html)  
  Merging Modules  
