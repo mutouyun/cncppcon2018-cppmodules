@@ -93,3 +93,26 @@ int main() {
     return 0;
 }
 ```
+
+那么想要在 `import std.core` 的同时导出它，自然就是在前面加上 `export` 了：
+
+```c++
+export module hello;
+
+export import std.core;
+using namespace std;
+
+export namespace hello {
+    void say(const char* str) {
+        cout << str << endl;
+    }
+}
+```
+
+关于 `export import` 这个含义晦涩的写法，reddit上还有一些有意思的讨论：[https://www.reddit.com/r/cpp/comments/69i38l/using_c_modules_in_visual_studio_2017/](https://www.reddit.com/r/cpp/comments/69i38l/using_c_modules_in_visual_studio_2017/)。
+
+### 2.3 Module Linkage
+
+模块接口单元（module interface unit）里不仅可以定义导出的实体，同样也可以定义非导出的实体。不同于之前C++的内部链接（internal linkage）和外部链接（external linkage），这些非导出的实体具有模块链接（module linkage）。  
+ 
+模块链接的意义在于这部分实体对于当前模块的所有编译单元来说都是可见的。这个特征可以很方便的在一个模块内的多个编译单元之间共享实体。
