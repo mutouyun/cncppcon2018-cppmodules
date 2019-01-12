@@ -115,4 +115,50 @@ export namespace hello {
 
 模块接口单元（module interface unit）里不仅可以定义导出的实体，同样也可以定义非导出的实体。不同于之前C++的内部链接（internal linkage）和外部链接（external linkage），这些非导出的实体具有模块链接（module linkage）。  
  
-模块链接的意义在于这部分实体对于当前模块的所有编译单元来说都是可见的。这个特征可以很方便的在一个模块内的多个编译单元之间共享实体。
+模块链接的意义在于这部分实体对于当前模块的所有编译单元来说都是可见的。这个特征可以很方便的在一个模块内的多个编译单元之间共享实体。  
+ 
+比如说，我们的模块hello可以拥有两个不同的编译单元，其中模块接口单元定义如下：
+
+```c++
+export module hello;
+
+/* module linkage */
+namespace hello {
+    void say_hi();
+}
+
+/* external linkage */
+export namespace hello {
+    void say_hello();
+    void say_xz();
+}
+```
+
+这里非导出的 `hello::say_hi` 即为具有模块链接的模块内部实体。通过模块接口单元给出声明，接下来我们需要通过模块实现单元（module implementation unit）提供具体的定义：
+
+```c++
+module hello;
+
+import std.core;
+using namespace std;
+
+namespace hello {
+    void say_hi() {
+        cout << "hello hi!" << endl;
+    }
+
+    void say_hello() {
+        cout << "hello world!" << endl;
+    }
+
+    void say_xz() {
+        cout << "hello xz!" << endl;
+    }
+}
+```
+
+模块实现单元和模块接口单元不同之处仅在于上方 `module hello` 的前面没有 `export`。将模块实现分割为一个模块接口单元，和多个模块实现单元，这种写法其实和我们使用头文件时很像。  
+ 
+使用头文件时，对于独立的某个功能模块，我们的代码组织结构可能会像下面这样：  
+ 
+![A with Header](images/2-3-1.png "A with Header")
