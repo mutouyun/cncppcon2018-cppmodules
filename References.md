@@ -18,7 +18,7 @@ description: 资料整理
 [http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2016/p0142r0.pdf](http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2016/p0142r0.pdf)  
 [http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2016/p0143r2.pdf](http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2016/p0143r2.pdf)  
 [http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2017/n4689.pdf](http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2017/n4689.pdf)  
-[http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2018/n4720.pdf](http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2018/n4720.pdf)  
+[http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2018/n4720.pdf](http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2018/n4720.pdf) Modules TS  
  Working Draft  
   
 [http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2018/p0955r0.pdf](http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2018/p0955r0.pdf)  
@@ -40,14 +40,14 @@ description: 资料整理
 [http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2018/p0906r1.html](http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2018/p0906r1.html)  
 [http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2018/p0983r0.pdf](http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2018/p0983r0.pdf)  
 [http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2018/p0923r1.pdf](http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2018/p0923r1.pdf)  
-[http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2018/p1242r0.pdf](http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2018/p1242r0.pdf)  
-[http://www.open-std.org/JTC1/SC22/WG21/docs/papers/2018/p1300r0.pdf](http://www.open-std.org/JTC1/SC22/WG21/docs/papers/2018/p1300r0.pdf)  
-[http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2018/p1213r0.pdf](http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2018/p1213r0.pdf)  
+[http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2018/p1242r0.pdf](http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2018/p1242r0.pdf) Single-file modules with the Atom semantic properties rule  
+[http://www.open-std.org/JTC1/SC22/WG21/docs/papers/2018/p1300r0.pdf](http://www.open-std.org/JTC1/SC22/WG21/docs/papers/2018/p1300r0.pdf) Remember the FORTRAN  
+[http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2018/p1213r0.pdf](http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2018/p1213r0.pdf) Global Module Fragment is Unnecessary  
 [http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2018/p1299r0.html](http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2018/p1299r0.html)  
-[http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2018/p1303r0.html](http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2018/p1303r0.html)  
+[http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2018/p1303r0.html](http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2018/p1303r0.html) Inline Module Partitions  
 [http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2018/p1302r0.html](http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2018/p1302r0.html)  
-[http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2018/p1203r0.html](http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2018/p1203r0.html)  
-[http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2012/n3347.pdf](http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2012/n3347.pdf)  
+[http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2018/p1203r0.html](http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2018/p1203r0.html) Modular main()  
+[http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2012/n3347.pdf](http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2012/n3347.pdf) Modules in C++  
  Related Proposals
   
 [https://www.reddit.com/r/cpp/comments/7b2och/c\_modules/](https://www.reddit.com/r/cpp/comments/7b2och/c_modules/)  

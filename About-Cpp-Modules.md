@@ -228,7 +228,6 @@ import hello:hi; // syntax error
 ```c++
 // hello_xz.mpp:
 export module hello:xz; // module interface partition
-
 export namespace hello {
     void say_xz();
 }
@@ -236,8 +235,191 @@ export namespace hello {
 // hello.mpp:
 export module hello; // module interface unit
 export import :xz;   // re-export is necessary
-
 export namespace hello {
     void say_hello();
 }
 ```
+
+模块hello实现单元的头部：`module hello;`，在指明这是一个实现单元的同时，也隐式的导入了hello，相当于默认 `import hello;`。但模块分区的声明却并不会隐式导入当前模块。  
+ 
+因此：
+
+```c++
+module hello:hi; // does not implicitly import hello
+
+namespace hello {
+    void say_hi() {
+        say_xz(); // error: say_xz not visible here
+    }
+}
+```
+
+模块分区中想使用模块接口单元中的实体，必须显式 `import` 一次：
+
+```c++
+module hello:hi; // does not implicitly import hello
+import hello;
+
+namespace hello {
+    void say_hi() {
+        say_xz(); // ok
+    }
+}
+```
+
+模块分区并不隐式依赖该模块，这也使得我们可以通过模块分区来解决模块见的循环依赖问题。  
+ 
+考虑如下场景：
+
+```c++
+// hello.mpp:
+export module hello;
+import mod;
+import std.core;
+using namespace std;
+
+namespace hello {
+    int data__;
+    void say_hello() {
+        std::cout << "hello world! data: " << mod::foo() << std::endl;
+    }
+}
+
+// mod.mpp:
+export module mod;
+import hello;
+
+namespace mod {
+    int foo() {
+        return hello::data__;
+    }
+}
+```
+
+hello => mod => hello，循环依赖将导致模块编译失败。考虑使用模块实现单元进行解耦：
+
+```c++
+// hello.mpp:
+export module hello;
+export namespace hello {
+    extern int data__;
+    void say_hello();
+}
+
+// hello_impl.cpp:
+module hello;
+import mod;
+import std.core;
+using namespace std;
+
+namespace hello {
+    int data__;
+    void say_hello() {
+        std::cout << "hello world! data: " << mod::foo() << std::endl;
+    }
+}
+
+// mod.mpp:
+export module mod;
+export namespace mod {
+    int foo();
+}
+
+// mod_impl.cpp:
+module mod;
+import hello;
+
+namespace mod {
+    int foo() {
+        return hello::data__;
+    }
+}
+```
+
+另一种做法，则是使用模块分区：
+
+```c++
+// hello.mpp:
+export module hello;
+export namespace hello {
+    extern int data__;
+    void say_hello();
+}
+
+// hello_impl.cpp:
+module hello:impl;
+import mod;
+// module hello;
+// import mod; /* error: cannot import module ‘hello’ in its own purview */
+import std.core;
+using namespace std;
+
+namespace hello {
+    int data__;
+    void say_hello() {
+        std::cout << "hello world! data: " << mod::foo() << std::endl;
+    }
+}
+
+// mod.mpp:
+export module mod;
+import hello;
+
+namespace mod {
+    int foo() {
+        return hello::data__;
+    }
+}
+```
+
+除此之外，模块分区还可以解决接口移动时的二进制兼容性问题。  
+ 
+比如如下情况：
+
+```c++
+// hello_xz.mpp:
+export module hello.xz;
+export namespace hello {
+    void say_xz();
+}
+
+// hello_hi.mpp:
+export module hello.hi;
+namespace hello {
+    void say_hi();
+}
+
+// hello.mpp:
+export module hello;
+export import hello.xz;
+import hello.hi;
+```
+
+`hello.xz` 和 `hello.hi` 是模块hello的两个子模块（submodule）。此时若需要重构代码，将 `hello::say_xz` 移动到 `hello.hi` 中，将导致 `hello.xz`、`hello.hi`、`hello`，以及所有依赖 `hello` 的模块的重编译。  
+ 
+因为其实在目前的模块提案中，并没有“子模块”的概念。上面的 `hello.xz` 和 `hello.hi`，本质上是独立于 `hello` 的两个不同模块。因此在外部看来，移动 `hello::say_xz` 并没有引起接口上的变化，但实际上接口发生了跨模块的调整，从而导致前后接口二进制不兼容。  
+ 
+因此，我们应该使用模块分区来隔离模块内部的“子模块”：
+
+```c++
+// hello_xz.mpp:
+export module hello:xz;
+export namespace hello {
+    void say_xz();
+}
+
+// hello_hi.mpp:
+export module hello:hi;
+namespace hello {
+    void say_hi();
+}
+
+// hello.mpp:
+export module hello;
+export import hello:xz;
+import hello:hi;
+```
+
+此时，在分区之间的任何代码移动，都不会导致 `hello` 的接口出现前后不兼容问题。“子模块”应该用在需要分别对外提供相同大分类，但小种类不同的接口上；而不应该用在模块自身的代码分割/解耦上。
+
+### 2.5 Global Module Fragment
