@@ -120,7 +120,7 @@ export namespace hello {
 比如说，我们的模块hello可以拥有两个不同的编译单元，其中模块接口单元定义如下：
 
 ```c++
-export module hello;
+export module hello; // module interface unit
 
 /* module linkage */
 namespace hello {
@@ -137,7 +137,7 @@ export namespace hello {
 这里非导出的 `hello::say_hi` 即为具有模块链接的模块内部实体。通过模块接口单元给出声明，接下来我们需要通过模块实现单元（module implementation unit）提供具体的定义：
 
 ```c++
-module hello;
+module hello; // module implementation unit
 
 import std.core;
 using namespace std;
@@ -179,4 +179,65 @@ namespace hello {
 
 通过非导出的模块链接（module linkage）实体，我们可以在一个模块内部的多个实现单元（module implementation unit）之间共享内容。但这些需要被共享的部分必须统统定义在模块接口单元（module interface unit）中，否则其它实现单元还是只能依赖头文件才能访问它们。  
  
-Google在 [Another take on Modules](http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2018/p0947r1.html) 中提出了模块分区（module partition）的概念，并在 [Merging Modules](http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2018/p1103r2.pdf) 中被采用。
+Google在 [Another take on Modules](http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2018/p0947r1.html) 中提出了模块分区（module partition）的概念，并在 [Merging Modules](http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2018/p1103r2.pdf) 中被采用。  
+ 
+对于上面提到的这种情况，我们可以通过模块实现分区（module implementation partition）将模块的内部细节从接口单元中分离出来：
+
+```c++
+module hello:hi; // module implementation partition
+
+import std.core;
+using namespace std;
+
+namespace hello {
+    void say_hi() {
+        cout << "hello hi!" << endl;
+    }
+}
+```
+
+之后，其它需要使用 `hello::say_hi` 的实现单元导入此分区即可：
+
+```c++
+module hello; // module implementation unit
+import :hi;   // import hello::say_hi
+
+namespace hello {
+    void say_hello() {
+        cout << "hello world!" << endl;
+        say_hi();
+    }
+
+    void say_xz() {
+        cout << "hello xz!" << endl;
+    }
+}
+```
+
+分区的导入，不需要也不应该指明模块名称。如下写法是错误的：
+
+```c++
+module hello;
+import hello:hi; // syntax error
+```
+
+模块分区是模块自身的内部细节，对于模块外部的使用者来说，模块内部的分区是透明的。因此一个模块访问其自身的分区不需要指明模块名；同时，它也无法访问其它模块内部的分区。  
+ 
+模块同时也可以定义接口分区（module interface partition），从而将一个庞大的模块接口单元拆分为数个小接口单元：
+
+```c++
+// hello_xz.mpp:
+export module hello:xz; // module interface partition
+
+export namespace hello {
+    void say_xz();
+}
+
+// hello.mpp:
+export module hello; // module interface unit
+export import :xz;   // re-export is necessary
+
+export namespace hello {
+    void say_hello();
+}
+```
