@@ -506,3 +506,10 @@ export import "some-header.h"; // macros are not exported
 遗留头单元可以被重新 `export`，就和 `export import` 一个模块一样，我们能导出其中的所有实体，但头文件中的宏并不会被导出。
  
 ## 3. C++ Modules是怎样工作的？
+
+我们先来简单回顾下目前的编译链接过程。  
+ 
+假如我们有2个cpp，分别是a和main。它们通过编译，得到对应的object文件，之后再通过链接，得到bin。  
+ 
+![Compile & Link](images/3-1.png "Compile & Link")  
+ 
