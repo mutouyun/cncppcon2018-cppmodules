@@ -4,7 +4,7 @@
 
 实际上，关于C++ Modules的讨论由来已久。  
  
-多年以来，C++的各个独立模块/编译单元之间通讯的手段，一直沿用C语言的头文件机制。这套机制过于简陋，加之C++中模板和`inline`的大量使用，`#include`已经显得有些不堪重负了。  
+多年以来，C++的各个独立模块/编译单元（translation unit）之间通讯的手段，一直沿用C语言的头文件机制。这套机制过于简陋，加之C++中模板和`inline`的大量使用，`#include`已经显得有些不堪重负了。  
  
 头文件的问题主要有如下几点：  
  
@@ -38,7 +38,8 @@ int main() {
 
 ## 2. C++ Modules怎么用？
 
-目前最新的提案是 [Merging Modules R2](http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2018/p1103r2.pdf)。  
+目前最新的提案是 [Merging Modules R2](http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2018/p1103r2.pdf "P1103R2
+Merging Modules")。  
  
 ### 2.1 Say Hello to Module
 
@@ -109,7 +110,22 @@ export namespace hello {
 }
 ```
 
-关于 `export import` 这个含义晦涩的写法，reddit上还有一些有意思的讨论：[https://www.reddit.com/r/cpp/comments/69i38l/using_c_modules_in_visual_studio_2017/](https://www.reddit.com/r/cpp/comments/69i38l/using_c_modules_in_visual_studio_2017/)。
+关于 `export import` 这个含义晦涩的写法，reddit上还有一些有意思的讨论：[https://www.reddit.com/r/cpp/comments/69i38l/using_c_modules_in_visual_studio_2017/](https://www.reddit.com/r/cpp/comments/69i38l/using_c_modules_in_visual_studio_2017/ "Using C++ Modules in Visual Studio 2017 : cpp")。  
+ 
+这里还有一个需要注意的地方，是模块并不会隐式引入一个namespace。我们可以看到，前面定义的 `module hello`，其 `namespace hello` 是我们显式在模块接口中定义的命名空间。若我们的模块没有导出任何namespace，那么外部使用此模块的时候，是不需要也不应该带上namespace的，模块中具名命名空间之外导出的实体，均处于全局命名空间。  
+ 
+那么我们能导出匿名命名空间么？比如像下面这样：
+ 
+```c++
+export module foo;
+export namespace {
+    void anonymous() {
+        // ...
+    }
+}
+```
+
+当然，这样写是不行的。匿名命名空间中的实体具有内部链接（internal linkage），具有内部链接的实体是无法导出的。
 
 ### 2.3 Module Linkage
 
@@ -179,7 +195,11 @@ namespace hello {
 
 通过非导出的模块链接（module linkage）实体，我们可以在一个模块内部的多个实现单元（module implementation unit）之间共享内容。但这些需要被共享的部分必须统统定义在模块接口单元（module interface unit）中，否则其它实现单元还是只能依赖头文件才能访问它们。  
  
-Google在 [Another take on Modules](http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2018/p0947r1.html) 中提出了模块分区（module partition）的概念，并在 [Merging Modules](http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2018/p1103r2.pdf) 中被采用。  
+Google在 [ATOM](http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2018/p0947r1.html#partitions "P0947R1
+Another take on Modules
+3.3. Module partitions") 中提出了模块分区（module partition）的概念，并在 [Merging Modules](http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2018/p1103r2.pdf "P1103R2
+Merging Modules
+2.2 Module partitions") 中被采用。  
  
 对于上面提到的这种情况，我们可以通过模块实现分区（module implementation partition）将模块的内部细节从接口单元中分离出来：
 
@@ -505,9 +525,9 @@ export import "some-header.h"; // macros are not exported
 
 遗留头单元可以被重新 `export`，就和 `export import` 一个模块一样，我们能导出其中的所有实体，但头文件中的宏并不会被导出。
  
-## 3. C++ Modules是怎样工作的？
+## 3. Modules的工作方式
 
-### 3.1 模块的编译、链接过程
+### 3.1 编译和链接
 
 我们先来简单回顾下目前的编译链接过程。  
  
@@ -515,10 +535,114 @@ export import "some-header.h"; // macros are not exported
  
 ![Compile & Link](images/3-1-1.png "Compile & Link")  
  
-在这个过程中，a.cpp和main.cpp之间是没有任何交流的（可能依赖相同的某个头文件）。而使用了模块之后，生成和依赖关系就会变成这样：  
+在这个过程中，a.cpp和main.cpp之间是没有任何交流的（可能依赖相同的某个头文件）。  
+ 
+而使用了模块之后，生成和依赖关系就会变成这样：  
  
 ![Compile & Link with Module](images/3-1-2.png "Compile & Link with Module")  
  
 在这里，我们可以看到a改为模块之后，通过编译模块接口单元（module interface unit），会得到两个东西：object文件，和BMI（binary module interface）文件。main.cpp是模块A的使用者，因此它的编译将会依赖A的BMI，所以a.mpp将会优先编译，之后main.cpp才会开始编译；最后，它们生成的object文件通过链接得到bin，链接的过程和之前是一致的。  
  
-因此，对于模块的发布而言，我们可能可以完全剔除掉头文件，以模块编译后的BMI为外部协议（而不是头文件）。各个编译器目前的BMI实现是不一致的，MSVC是ifc文件，Clang是pcm文件，GCC是gcm文件（之前拓展名是nms）。
+因此，对于模块的发布而言，我们可能可以完全剔除掉头文件，以模块编译后的BMI为外部协议（而不是头文件）。各个编译器目前的BMI实现是不一致的，MSVC是ifc文件，Clang是pcm文件，GCC是gcm文件（之前拓展名是nms）。  
+ 
+每个模块接口单元都是一个编译单元，因此编译之后都会生成object文件。但像如下模块单元编译之后呢？
+
+```c++
+export module foo;
+export namespace foo {
+    inline void func() {
+        // ...
+    }
+
+    template <int N>
+    constexpr int square_v = N * N;
+
+    class bar {
+        int a_ = 123;
+
+    public:
+        int get() const { return a_; }
+    };
+}
+```
+
+对于完全 `inline` 或 `constexpr` 的模块单元来说，其编译之后生成的object中没有任何符号。因此对于之前由纯头文件组成的库来说，我们甚至可以只提供模块的BMI。
+
+### 3.2 类的private成员
+
+对于一个类而言，其定义中的 `private` 成员同样会被导出。
+
+```c++
+export module foo;
+export namespace foo {
+    class bar {
+    private:
+        int a_ = 123; // a_ is reachable, but not accessible
+
+    public:
+        int get() const { return a_; }
+    };
+}
+```
+
+这是自然的。否则 `sizeof(bar)` 就无法得到正确的结果了。如果我们需要隐藏 `bar` 的 `private` 实现，和之前头文件一样，可以使用 [PImpl惯用法](https://zh.cppreference.com/w/cpp/language/pimpl "PImpl - cppreference.com")；或者仅导出 `bar` 的声明，而[不导出定义](http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2018/p0986r0.html#decl-export "P0986R0
+Comparison of Modules Proposals
+3.2. Exporting just a declaration")：
+
+```c++
+// foo_impl.cpp:
+module foo:impl;
+namespace foo {
+    class bar {
+    private:
+        int a_ = 123;
+    public:
+        int get() const { return a_; }
+    };
+}
+
+// foo.mpp:
+export module foo;
+// Semantic effect of defining class bar is not re-exported
+import :impl;
+export namespace foo {
+    // Export handle as a typedef for a pointer to type bar,
+    // which is incomplete outside module foo
+    using handle = bar*;
+    inline int get(handle h) {
+        return h->get();
+    }
+}
+```
+
+但是这样做的话，我们必须使用一个额外的模块单元才能达到我们的目的，因此[模块提案](http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2018/p1242r0.pdf "P1242R0
+Single-file modules with the Atom semantic properties rule")中引入了 `module :private;` 语法，让我们可以在一个文件中导出一个 `incomplete type pointer`：
+
+```c++
+// foo.mpp:
+export module foo;
+
+namespace foo {
+    class bar;
+    export using handle = bar*;
+    export inline int get(handle h) {
+        return h->get();
+    }
+}
+
+module :private;
+namespace foo {
+    class bar {
+    private:
+        int a_ = 123;
+    public:
+        int get() const { return a_; }
+    };
+}
+```
+
+目前此语法已加入 [Merging Modules R2](http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2018/p1103r2.pdf "P1103R2
+Merging Modules
+3.1.2 P1242R1: Single-file modules")。
+
+### 3.3 Lazy Loading
