@@ -507,9 +507,16 @@ export import "some-header.h"; // macros are not exported
  
 ## 3. C++ Modules是怎样工作的？
 
+### 3.1 模块的编译、链接过程
+
 我们先来简单回顾下目前的编译链接过程。  
  
-假如我们有2个cpp，分别是a和main。它们通过编译，得到对应的object文件，之后再通过链接，得到bin。  
+假如我们有2个cpp，分别是a和main。它们通过编译，得到对应的object文件，之后再通过链接得到bin。  
  
-![Compile & Link](images/3-1.png "Compile & Link")  
+![Compile & Link](images/3-1-1.png "Compile & Link")  
  
+在这个过程中，a.cpp和main.cpp之间是没有任何交流的（可能依赖相同的某个头文件）。而使用了模块之后，生成和依赖关系就会变成这样：  
+ 
+![Compile & Link with Module](images/3-1-2.png "Compile & Link with Module")  
+ 
+在这里，我们可以看到a改为模块之后，通过编译模块接口单元（module interface unit），会得到两个东西：object文件，和BMI（binary module interface）文件。main.cpp是模块A的使用者，因此它的编译将会依赖A的BMI，所以a.mpp将会优先编译，之后main.cpp才会开始编译；最后，它们生成的object文件通过链接得到bin，链接的过程和之前是一致的。
