@@ -615,7 +615,7 @@ export namespace foo {
 }
 ```
 
-但是这样做的话，我们必须使用一个额外的模块单元才能达到我们的目的，因此[模块提案](http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2018/p1242r0.pdf "P1242R0
+但是这样做的话，我们必须使用一个额外的模块单元才能达到我们的目的，因此[后续的模块提案](http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2018/p1242r0.pdf "P1242R0
 Single-file modules with the Atom semantic properties rule")中引入了 `module :private;` 语法，让我们可以在一个文件中导出一个 `incomplete type pointer`：
 
 ```c++
