@@ -521,7 +521,4 @@ export import "some-header.h"; // macros are not exported
  
 在这里，我们可以看到a改为模块之后，通过编译模块接口单元（module interface unit），会得到两个东西：object文件，和BMI（binary module interface）文件。main.cpp是模块A的使用者，因此它的编译将会依赖A的BMI，所以a.mpp将会优先编译，之后main.cpp才会开始编译；最后，它们生成的object文件通过链接得到bin，链接的过程和之前是一致的。  
  
-因此，对于模块的发布而言，我们可能可以完全剔除掉头文件，以模块编译后的BMI为外部协议（而不是头文件）：  
- 
-![Release with Module](images/3-1-3.png "Release with Module")  
- 
+因此，对于模块的发布而言，我们可能可以完全剔除掉头文件，以模块编译后的BMI为外部协议（而不是头文件）。各个编译器目前的BMI实现是不一致的，MSVC是ifc文件，Clang是pcm文件，GCC是gcm文件（之前拓展名是nms）。
