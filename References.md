@@ -4,15 +4,17 @@ description: 资料整理
 
 # C++ Modules
 
-[http://files.cnblogs.com/files/qicosmos/Cplus17新特性带来的改善和音响.pdf](http://files.cnblogs.com/files/qicosmos/Cplus17新特性带来的改善和音响.pdf)   
-[http://llvm.org/devmtg/2012-11/Gregor-Modules.pdf](http://llvm.org/devmtg/2012-11/Gregor-Modules.pdf) Modules, Doug Gregor, Apple, 2012  
-[https://www.youtube.com/watch?v=5CadIjPRZpM](https://www.youtube.com/watch?v=5CadIjPRZpM) Progress With C++ Modules - GNU Tools Cauldron 2018  
-[https://www.youtube.com/watch?v=xi2lTaC5p0I](https://www.youtube.com/watch?v=xi2lTaC5p0I) CppCon 2018: Nathan Sidwell “C++ Modules”  
-[https://www.youtube.com/watch?v=5EI3XBde\_w4](https://www.youtube.com/watch?v=5EI3XBde_w4) CppCon 2017: Nathan Sidwell “Adding C++ modules-ts to the GNU Compiler”  
-[https://www.youtube.com/watch?v=PxFrhYAYF3M](https://www.youtube.com/watch?v=PxFrhYAYF3M) CppCon 2017: Boris Kolpackov “C++ Modules and Packages: Making Dreams Come True” \(build2\)  
-[https://www.youtube.com/watch?v=E8EbDcLQAoc](https://www.youtube.com/watch?v=E8EbDcLQAoc) CppCon 2017: Boris Kolpackov “Building C++ Modules”  
-[https://www.youtube.com/watch?v=dHFNpBfemDI](https://www.youtube.com/watch?v=dHFNpBfemDI) CppCon 2016: Manuel Klimek “Deploying C++ modules to 100s of millions of lines of code"  
-[https://build2.org/doc/modules-cppcon2017.pdf](https://build2.org/doc/modules-cppcon2017.pdf)  
+[吴钊, C++17新特性带来的改善和影响 (PDF)](http://files.cnblogs.com/files/qicosmos/Cplus17新特性带来的改善和音响.pdf)   
+[2012: Doug Gregor, Apple, Modules](http://llvm.org/devmtg/2012-11/Gregor-Modules.pdf)  
+[Progress With C++ Modules - GNU Tools Cauldron 2018](https://www.youtube.com/watch?v=5CadIjPRZpM)  
+[CppCon 2018: Nathan Sidwell “C++ Modules”](https://www.youtube.com/watch?v=xi2lTaC5p0I)  
+[CppCon 2017: Nathan Sidwell “Adding C++ modules-ts to the GNU Compiler”](https://www.youtube.com/watch?v=5EI3XBde_w4)  
+[CppCon 2017: Boris Kolpackov “C++ Modules and Packages: Making Dreams Come True” (build2)](https://www.youtube.com/watch?v=PxFrhYAYF3M)  
+[CppCon 2017: Boris Kolpackov “Building C++ Modules”](https://www.youtube.com/watch?v=E8EbDcLQAoc)  
+[CppCon 2017: Boris Kolpackov “Building C++ Modules” (PDF)](https://build2.org/doc/modules-cppcon2017.pdf)  
+[CppCon 2016: Manuel Klimek “Deploying C++ modules to 100s of millions of lines of code"](https://www.youtube.com/watch?v=dHFNpBfemDI)  
+[2017: Vassil Vassilev and Raphael Isemann, ROOT C++ modules (PDF)](https://indico.cern.ch/event/643728/contributions/2612822/attachments/1494074/2323893/ROOTs_C_modules_status_report.pdf)  
+[2018: Yuka Takahashi/Vasil Geogiev Vasilev/Oksana Shadura, Updates on ROOT C++ modules (PDF)](https://indico.cern.ch/event/643728/contributions/2612822/attachments/1494074/2323893/ROOTs_C_modules_status_report.pdf)  
  Speeches  
   
 [http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2016/p0142r0.pdf](http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2016/p0142r0.pdf)  
@@ -64,6 +66,7 @@ description: 资料整理
 [https://stackoverflow.com/questions/46469921/is-everything-after-an-exporting-namespace-not-exported](https://stackoverflow.com/questions/46469921/is-everything-after-an-exporting-namespace-not-exported)  
 [https://stackoverflow.com/questions/43882243/c-20-modules-no-exporting-of-privates](https://stackoverflow.com/questions/43882243/c-20-modules-no-exporting-of-privates)  
 [https://stackoverflow.com/questions/43167449/how-to-export-functions-and-classes-from-module-not-using-export-keyword](https://stackoverflow.com/questions/43167449/how-to-export-functions-and-classes-from-module-not-using-export-keyword)  
+[http://iopscience.iop.org/article/10.1088/1742-6596/898/7/072023/pdf](http://iopscience.iop.org/article/10.1088/1742-6596/898/7/072023/pdf) Optimizing ROOT’s Performance Using C++ Modules  
  Discussions
   
 [https://blogs.msdn.microsoft.com/vcblog/2015/12/03/c-modules-in-vs-2015-update-1/](https://blogs.msdn.microsoft.com/vcblog/2015/12/03/c-modules-in-vs-2015-update-1/)  

@@ -10,7 +10,7 @@
  
  * 脆弱的文本展开
  * 内部细节的意外导出
- * 大量的重复处理（N x M）导致了低下的编译效率
+ * 大量的重复处理（`N x M`）导致了低下的编译效率
  * 无法保证编译单元的一致性（ODR）
  * 对开发工具很不友好
  
@@ -525,7 +525,7 @@ export import "some-header.h"; // macros are not exported
 
 遗留头单元可以被重新 `export`，就和 `export import` 一个模块一样，我们能导出其中的所有实体，但头文件中的宏并不会被导出。
  
-## 3. Modules的工作方式
+## 3. C++ Modules的工作方式
 
 ### 3.1 编译和链接
 
@@ -616,7 +616,7 @@ export namespace foo {
 ```
 
 但是这样做的话，我们必须使用一个额外的模块单元才能达到我们的目的，因此[后续的模块提案](http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2018/p1242r0.pdf "P1242R0
-Single-file modules with the Atom semantic properties rule")中引入了 `module :private;` 语法，让我们可以在一个文件中导出一个 `incomplete type pointer`：
+Single-file modules with the Atom semantic properties rule")中引入了 `module :private;` 语法，让我们可以在一个单独的文件中导出 `incomplete type pointer`：
 
 ```c++
 // foo.mpp:
@@ -645,4 +645,121 @@ namespace foo {
 Merging Modules
 3.1.2 P1242R1: Single-file modules")。
 
-### 3.3 Lazy Loading
+### 3.3 编译性能
+
+模块可以大幅提升我们编译时的速度。它避免了大量重复的解析，并将编译时的复杂度由 `N x M` 将为 `N + M`。  
+ 
+我使用 [Clang-8](https://clang.llvm.org/get_started.html "Getting Started: Building and Running Clang") 做了一下简单的性能测试。从单个头文件/模块的引入开始：
+
+```c++
+// func.h:
+#pragma once
+
+#include <iostream>
+using namespace std;
+
+inline void func(const char* value) {
+    cout << __FUNCTION__ << " " << value << "\n";
+}
+
+// main.cpp:
+#include "func.h"
+
+int main() {
+    func("");
+}
+```
+
+使用模块的版本：
+
+```c++
+// func.mpp:
+#include <iostream>
+export module func;
+using namespace std;
+
+export inline void func(const char* value) {
+    cout << __FUNCTION__ << " " << value << "\n";
+}
+
+// main.cpp:
+import func;
+
+int main() {
+    func("");
+}
+```
+
+测试结果如下：  
+
+![performance: TU Increasing](images/3-3-1.png "performance: TU Increasing")  
+
+很明显，随着编译单元数量的增加，头文件的编译时间直线上升，而模块变化不大。  
+ 
+当头文件/模块和编译单元数量同时增加时，头文件的编译时间呈平方曲线增长，而模块则呈线性增长：  
+ 
+![performance: Headers/Modules x TUs](images/3-3-2.png "performance: Headers/Modules x TUs")  
+ 
+其实，这里的头文件/模块数量增加的测试对模块来说稍微有点不公平，因为 `#include` 的时候，同一个头文件不会被包含两次。当我们写出如下代码的时候：  
+ 
+```c++
+#include "func.h"
+#include "func1.h"
+
+int main() {
+    // ...
+}
+```
+
+`func.h` 中已经 `#include` 了的头文件，在 `func1.h`中是不会再被编译一次的。而我采用模块测试的时候，为了公平起见，并没有使用标准库的模块版本，而是在模块中通过 `#include <iostream>` 将头文件展开到模块单元中一起编译了一遍。  
+ 
+这样的话，在多头文件/模块时，哪怕是不同的标准库头文件，它们之间也会存在一定的相互引用的情况。因此头文件的测试实际上会在一开始比模块版本少编译一些代码。但哪怕是这样，模块的编译速度也远远超过了头文件的版本。  
+ 
+考虑到模块的工作原理，如果模块接口单元中只存在模板这种在使用时才会实例化的实体，编译速度是否还会有这么大的提升呢？比如说，测试一下下面这样的代码：
+
+```c++
+// mod.mpp:
+export module mod;
+
+export template <int N, int M>
+void test_prod_cons() {
+    // many codes here...
+}
+
+export template <int N>
+struct foo {};
+
+export inline void test_performance(foo<1>, foo<1>) {
+    test_prod_cons<1, 1>();
+}
+
+export template <int N>
+void test_performance(foo<N>, foo<1>) {
+    test_performance(foo<N - 1>{}, foo<1>{});
+    test_prod_cons<N, 1>();
+};
+
+export template <int N, int M>
+void test_performance(foo<N>, foo<M>) {
+    test_performance(foo<N>{}, foo<M - 1>{});
+    test_prod_cons<N, M>();
+};
+
+// main.cpp:
+import mod;
+
+int main(void) {
+    // 100 + 100 = 200 test_prod_cons functions instantiate here...
+    test_performance(foo<100>{}, foo<100>{});
+    return 0;
+}
+```
+ 
+在这种情况下，模块对比头文件并没有多少性能上的优势：
+
+![performance: Headers/Modules with Template](images/3-3-3.png "performance: Headers/Modules with Template")  
+
+因此对于模板库来说，使用的时候通过C++11的 [`extern template`](https://zh.cppreference.com/w/cpp/language/class_template "Class template - cppreference.com
+显式实例化声明（Explicit instantiation declaration）") 避免相同的实例化还是必要的。
+
+## 4. 目前的构建支持
