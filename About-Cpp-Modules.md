@@ -399,7 +399,7 @@ import hello.hi;
  
 因为其实在目前的模块提案中，并没有“子模块”的概念。上面的 `hello.xz` 和 `hello.hi`，本质上是独立于 `hello` 的两个不同模块。因此在外部看来，移动 `hello::say_xz` 并没有引起接口上的变化，但实际上接口发生了跨模块的调整，从而导致前后接口二进制不兼容。  
  
-因此，我们应该使用模块分区来隔离模块内部的“子模块”：
+因此，我们应该使用模块分区来隔离模块内部的不同部分：
 
 ```c++
 // hello_xz.mpp:
@@ -423,3 +423,86 @@ import hello:hi;
 此时，在分区之间的任何代码移动，都不会导致 `hello` 的接口出现前后不兼容问题。“子模块”应该用在需要分别对外提供相同大分类，但小种类不同的接口上；而不应该用在模块自身的代码分割/解耦上。
 
 ### 2.5 Global Module Fragment
+
+在一段时间内，我们使用模块的同时也必须面对大量带有头文件的代码。头文件是不会被模块彻底取代的。因此，我们势必要为模块访问头文件找到合适的方法。  
+ 
+很自然的，我们可能会写出下面的代码：
+
+```c++
+// hello.mpp:
+export module hello;
+#include <iostream> // error
+using namespace std;
+
+namespace hello {
+    void say_hello() {
+        cout << "hello world!" << endl;
+    }
+}
+```
+
+头文件的 `#include` 是不能放在模块范围内的，这会让其中的内容变成模块链接（module linkage）。因此，模块系统引入了全局模块片段（global module fragment）。它允许我们这样使用头文件：
+
+```c++
+module; // module; introducer
+#include "some-header.h"
+export module foo;
+// ... use declarations and macros from some-header.h ...
+```
+
+我们可以把所有处于模块范围之外的代码理解为处于全局模块（global module）的范围，而每个全局模块片段，都展示了全局模块的一部分。不同的全局模块片段，都相当于全局模块的不同视图（view）：
+
+```c++
+// hello.mpp:
+module;
+// fragment-1-begin
+#include <iostream>
+// fragment-1-end
+export module hello;
+using namespace std;
+
+namespace hello {
+    void say_hello() {
+        cout << "hello world!" << endl;
+    }
+}
+
+// main.cpp:
+// fragment-2-begin
+import hello;
+#include <iostream>
+
+int main() {
+    hello::say_hello();
+    return 0;
+}
+// fragment-2-end
+```
+
+### 2.6 Legacy Header Unit
+
+全局模块片段（global module fragment）解决了模块使用头文件的问题。但很显然，通过片段引入的头文件，和没有模块的时候时一样的，头文件该有的问题还是存在。  
+ 
+遗留头文件单元（legacy header unit）可以让我们直接导入一个头文件，而不必费心思的将其转化为模块后再导入：
+
+```c++
+export module foo;
+import "some-header.h";
+import <version>;
+// ... use declarations and macros from some-header.h and <version> ...
+```
+
+它的语法看起来就像是将 `#include` 替换为了 `import`。  
+ 
+使用遗留头单元的时候，编译器会将 `import` 的头文件视为一个编译单元进行编译，并从中萃取出所有接口（包括宏）用于导入。它的工作结果类似于预编译头（precompiled header），只是粒度可以自由控制，使得我们可以针对任何头文件做单独的预编译，并让头文件的导入变成预编译结果的导入。  
+ 
+这里有一些细节是需要注意的：
+
+```c++
+export module foo;
+export import "some-header.h"; // macros are not exported
+```
+
+遗留头单元可以被重新 `export`，就和 `export import` 一个模块一样，我们能导出其中的所有实体，但头文件中的宏并不会被导出。
+ 
+## 3. C++ Modules是怎样工作的？
