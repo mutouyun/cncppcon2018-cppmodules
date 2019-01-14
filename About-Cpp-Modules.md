@@ -800,4 +800,4 @@ Clang的示例代码参考：[clang](codes/clang)
 
 ## References
 
-请参考资料整理：[References](References.md)
+参考资料整理：[References](References.md)
