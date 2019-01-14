@@ -316,7 +316,7 @@ namespace mod {
 }
 ```
 
-hello => mod => hello，循环依赖将导致模块编译失败。考虑使用模块实现单元进行解耦：
+hello => mod => hello，循环依赖将导致模块编译失败。使用模块实现单元进行解耦：
 
 ```c++
 // hello.mpp:
@@ -392,7 +392,7 @@ namespace mod {
 }
 ```
 
-除此之外，模块分区还可以解决接口移动时的二进制兼容性问题。  
+除此之外，模块分区还可以规避接口移动时的二进制兼容性问题。  
  
 比如如下情况：
 
@@ -461,7 +461,7 @@ namespace hello {
 }
 ```
 
-头文件的 `#include` 是不能放在模块范围内的，这会让其中的内容变成模块链接（module linkage）。因此，模块系统引入了全局模块片段（global module fragment）。它允许我们这样使用头文件：
+一般来说，`#include` 是不能放在模块范围内的（模块内部使用头文件共享代码或声明等情况除外），这会让其中的内容变成模块链接（module linkage）。因此，模块系统引入了全局模块片段（global module fragment）。它允许我们这样使用头文件：
 
 ```c++
 module; // module; introducer
@@ -501,7 +501,7 @@ int main() {
 
 ### 2.6 Legacy Header Unit
 
-全局模块片段（global module fragment）解决了模块使用头文件的问题。但很显然，通过片段引入的头文件，和没有模块的时候时一样的，头文件该有的问题还是存在。  
+全局模块片段（global module fragment）解决了模块使用头文件的问题。但很显然，通过片段引入的头文件，和没有模块的时候是一样的，头文件该有的问题还是存在。  
  
 遗留头文件单元（legacy header unit）可以让我们直接导入一个头文件，而不必费心思的将其转化为模块后再导入：
 
@@ -545,7 +545,7 @@ export import "some-header.h"; // macros are not exported
  
 因此，对于模块的发布而言，我们可能可以完全剔除掉头文件，以模块编译后的BMI为外部协议（而不是头文件）。各个编译器目前的BMI实现是不一致的，MSVC是ifc文件，Clang是pcm文件，GCC是gcm文件（之前拓展名是nms）。  
  
-每个模块接口单元都是一个编译单元，因此编译之后都会生成object文件。但像如下模块单元编译之后呢？
+每个模块接口单元都是一个编译单元，因此编译之后都会生成object。但如下模块单元编译之后呢？
 
 ```c++
 export module foo;
@@ -585,7 +585,7 @@ export namespace foo {
 }
 ```
 
-这是自然的。否则 `sizeof(bar)` 就无法得到正确的结果了。如果我们需要隐藏 `bar` 的 `private` 实现，和之前头文件一样，可以使用 [PImpl惯用法](https://zh.cppreference.com/w/cpp/language/pimpl "PImpl - cppreference.com")；或者仅导出 `bar` 的声明，而[不导出定义](http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2018/p0986r0.html#decl-export "P0986R0
+这是当然的，否则 `sizeof(bar)` 就无法得到正确的结果了。如果我们需要隐藏 `bar` 的 `private` 实现，和之前头文件一样，可以使用 [PImpl惯用法](https://zh.cppreference.com/w/cpp/language/pimpl "PImpl - cppreference.com")；或者仅导出 `bar` 的声明，而[不导出定义](http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2018/p0986r0.html#decl-export "P0986R0
 Comparison of Modules Proposals
 3.2. Exporting just a declaration")：
 
@@ -630,7 +630,9 @@ namespace foo {
     }
 }
 
+// Separating the interface from the implementation
 module :private;
+
 namespace foo {
     class bar {
     private:
@@ -647,9 +649,9 @@ Merging Modules
 
 ### 3.3 编译性能
 
-模块可以大幅提升我们编译时的速度。它避免了大量重复的解析，并将编译时的复杂度由 `N x M` 将为 `N + M`。  
+模块可以大幅提升我们编译时的速度。它避免了大量重复的解析，并将编译时的复杂度由 `N x M` 降为 `N + M`。  
  
-我使用 [Clang-8](https://clang.llvm.org/get_started.html "Getting Started: Building and Running Clang") 做了一下简单的性能测试。从单个头文件/模块的引入开始：
+我使用 [Clang-8](https://clang.llvm.org/get_started.html "Getting Started: Building and Running Clang") 做了一下简单的性能测试。从单个头文件/模块开始：
 
 ```c++
 // func.h:
@@ -711,11 +713,11 @@ int main() {
 }
 ```
 
-`func.h` 中已经 `#include` 了的头文件，在 `func1.h`中是不会再被编译一次的。而我采用模块测试的时候，为了公平起见，并没有使用标准库的模块版本，而是在模块中通过 `#include <iostream>` 将头文件展开到模块单元中一起编译了一遍。  
+`func.h` 中已经 `#include` 了的头文件，在 `func1.h`中是不会被再编译一次的。而我采用模块测试的时候，为了公平起见，并没有使用标准库的模块版本，而是在模块中通过 `#include <iostream>` 将头文件展开到模块单元中编译了一遍。  
  
-这样的话，在多头文件/模块时，哪怕是不同的标准库头文件，它们之间也会存在一定的相互引用的情况。因此头文件的测试实际上会在一开始比模块版本少编译一些代码。但哪怕是这样，模块的编译速度也远远超过了头文件的版本。  
+这样的话，在多头文件/模块时，哪怕是不同的标准库头文件，它们之间也会存在一定的相互引用的情况。所以头文件的测试实际上会在一开始比模块版本少编译一些代码。  
  
-考虑到模块的工作原理，如果模块接口单元中只存在模板这种在使用时才会实例化的实体，编译速度是否还会有这么大的提升呢？比如说，测试一下下面这样的代码：
+考虑到模块的工作原理，如果模块接口单元中只存在模板这种在使用时才会实例化的实体，其编译速度是否还会有这么大的提升呢？比如说，测试一下下面这样的代码：
 
 ```c++
 // mod.mpp:
@@ -755,7 +757,7 @@ int main(void) {
 }
 ```
  
-在这种情况下，模块对比头文件并没有多少性能上的优势：
+实际显示，在这种情况下，模块对比头文件并没有多少性能上的优势：
 
 ![performance: Headers/Modules with Template](images/3-3-3.png "performance: Headers/Modules with Template")  
 
@@ -763,3 +765,39 @@ int main(void) {
 显式实例化声明（Explicit instantiation declaration）") 避免相同的实例化还是必要的。
 
 ## 4. 目前的构建支持
+
+**MSVC 2017**
+ 
+[微软从VS 2015开始](https://blogs.msdn.microsoft.com/vcblog/2015/12/03/c-modules-in-vs-2015-update-1/ "C++ Modules in VS 2015 Update 1 | Visual C++ Team Blog")实验性的支持C++ Modules。目前的[2017 15.9版本对模块的支持](https://blogs.msdn.microsoft.com/vcblog/2018/11/27/better-template-support-and-error-detection-in-c-modules-with-msvc-2017-version-15-9/ "Better template support and error detection in C++ Modules with MSVC 2017 version 15.9 | Visual C++ Team Blog")完善了不少。  
+ 
+在VS安装的时候选择安装“Standard Library Modules”，就可以尝试微软编译好的std标准库模块。具体参考：[Using C++ Modules in Visual Studio 2017](https://blogs.msdn.microsoft.com/vcblog/2017/05/05/cpp-modules-in-visual-studio-2017/ "Using C++ Modules in Visual Studio 2017 | Visual C++ Team Blog")
+ 
+微软的示例代码参考：[msvc](codes/msvc)  
+ 
+**GCC**
+ 
+GCC在一个[单独的分支](svn://gcc.gnu.org/svn/gcc/branches/c++-modules "branch: 'c++-modules'")中提供了对模块的支持。  
+ 
+目前GCC实现了 [`module;` introducer](http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2018/p0713r1.html "P0713R1
+Identifying Module Source")和 Legacy Header Units，但还有很多BUG，以及大量细节没有处理。简单来说，`inline`、`template`支持很不好，动不动就ICE。  
+ 
+官方参考：[C++ Modules](https://gcc.gnu.org/wiki/cxx-modules "cxx-modules - GCC Wiki")  
+GCC的示例代码参考：[gcc](codes/gcc)  
+ 
+**Clang**
+ 
+Clang的模块从可用性上来说，可能是目前几大编译器里最高的了。另外Clang有自己的一套 [Module map language](https://clang.llvm.org/docs/Modules.html#module-map-language) 将现有头文件映射为模块。  
+ 
+官方参考：[Modules](https://clang.llvm.org/docs/Modules.html "Modules — Clang 8 documentation")  
+Stack Overflow上的讨论：[How do I use C++ modules in Clang? - Stack Overflow](https://stackoverflow.com/questions/33307657/how-do-i-use-c-modules-in-clang)  
+Clang的示例代码参考：[clang](codes/clang)  
+
+**构建**
+ 
+目前主流的构建工具尚没有对模块做出支持。有开发者为[CMake提交了一个patch](https://gitlab.kitware.com/cmake/cmake/merge_requests/2482 "Add experimental support for C++ Modules TS if the compiler supports it (!2482) · Merge Requests · CMake / CMake · GitLab")用以支持Clang的Modules，但最终并没有被合并到主分支里。  
+ 
+目前官方支持模块构建的工具是 [build2](https://build2.org/ "build2 | C++ Build Toolchain")，可以在他们的官方文档里找到对C++ Modules的支持介绍：[The build2 Build System, 6 cxx Module](https://build2.org/build2/doc/build2-build-system-manual.xhtml#module-cxx)
+
+## References
+
+请参考资料整理：[References](References.md)
