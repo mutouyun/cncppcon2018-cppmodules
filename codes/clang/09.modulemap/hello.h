@@ -1,6 +1,6 @@
 #pragma once
 
-#include <iostream>
+import std;
 using namespace std;
 
 namespace hello {

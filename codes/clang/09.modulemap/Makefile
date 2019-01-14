@@ -3,7 +3,8 @@
 CC = clang
 CX = clang++
 LB = clang++
-CFLAGS = -fmodules-ts
+CFLAGS = -stdlib=libc++ -fmodules-ts -fmodules -fbuiltin-module-map
+LFLAGS = -stdlib=libc++
 
 # Compile
 
@@ -11,11 +12,11 @@ all: main
 
 main.o: main.cpp
 	@echo Compiling $^...
-	@$(CX) $(CFLAGS) -fmodules -fmodule-map-file=module.modulemap -c main.cpp
+	@$(CX) $(CFLAGS) -fmodule-map-file=module.modulemap -fmodules-cache-path=. -c main.cpp
 
 main: main.o
 	@echo Linking $^...
-	@$(LB) $^
+	@$(LB) $(LFLAGS) $^
 
 # Targets
 
